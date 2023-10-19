@@ -1,6 +1,6 @@
 CC = cc
 CFLAGS = -c -Wall -I./include
-SOURCE = main.c ft_printf.c
+SOURCE = $(wildcard src/*.c)
 OBJ=$(SOURCE:.c=.o)
 
 EXE= ft_printf
