@@ -1,9 +1,18 @@
-file: file.o
-	cc main.c -o file
-file.o: main.c
-	cc -c main.c -o file.o
+CC = cc
+CFLAGS = -c -Wall -I./include
+SOURCE = main.c ft_printf.c
+OBJ=$(SOURCE:.c=.o)
 
-list_files: $(wildcard *.c)
-	echo $?
-clean: 
-	rm -f file.o
+EXE= ft_printf
+
+all: $(SOURCE) $(EXE)
+
+$(EXE): $(OBJ)
+	$(CC) $(OBJ) -o $@
+
+
+%.o: %.c
+	$(CC) $(CFLAGS) $< -o $@
+
+clean:
+	rm -rf $(OBJ) $(EXE)

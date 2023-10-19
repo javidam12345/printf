@@ -1,6 +1,6 @@
 #include <stdio.h>
-
+#include "ft_printf.h"
 int main() {
-    printf("Hello world!,%6.2f\n",3.3);
+    ft_printf("hi");
     return 0;
 }
