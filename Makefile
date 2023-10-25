@@ -1,14 +1,15 @@
 CC = cc
-CFLAGS = -c -Wall -I./include
+LDFLAGS = -L./lib/ -lft
+CFLAGS = -c -Wall -I./include -I./lib
 SOURCE = $(wildcard src/*.c)
 OBJ=$(SOURCE:.c=.o)
 
-EXE= ft_printf
+EXE= ft_printf.exe
 
 all: $(SOURCE) $(EXE)
 
 $(EXE): $(OBJ)
-	$(CC) $(OBJ) -o $@
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
 
 
 %.o: %.c
