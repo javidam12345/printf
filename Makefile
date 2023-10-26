@@ -4,7 +4,7 @@ CFLAGS = -c -Wall -I./include -I./lib
 SOURCE = $(wildcard src/*.c)
 OBJ=$(SOURCE:.c=.o)
 
-EXE= ft_printf.exe
+EXE= ft_printf
 
 all: $(SOURCE) $(EXE)
 
