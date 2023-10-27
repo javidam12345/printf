@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaragone <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/27 19:25:37 by jaragone          #+#    #+#             */
+/*   Updated: 2023/10/27 19:25:40 by jaragone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
-# include "libft.h"
 # include <stdarg.h>
 # include <stdio.h>
 # include <unistd.h>
@@ -37,5 +48,13 @@ void	print_character(va_list *arg_ptr, int *num_of_characters);
 void	print_percentage(int *num_of_character);
 
 void	print_rest(const char *character, int *num_of_characters);
+
+void	ft_putstr_fd(char *s, int fd);
+
+void	ft_putnbr_fd(int n, int fd);
+
+void	ft_putchar_fd(char c, int fd);
+
+size_t	ft_strlen(const char *str);
 
 #endif
