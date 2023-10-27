@@ -1,19 +1,40 @@
+NAME = libftprintf.a
+
 CC = cc
-LDFLAGS = -L./lib/ -lft
-CFLAGS = -c -Wall -I./include -I./lib
-SOURCE = $(wildcard src/*.c)
-OBJ=$(SOURCE:.c=.o)
+CFLAGS = -Wall -Wextra -Werror
 
-EXE= ft_printf
+LIBFT = libft/
+LIBFT_LIB = libft/libft.a
 
-all: $(SOURCE) $(EXE)
+INCLUDES = -I include/
 
-$(EXE): $(OBJ)
-	$(CC) $(OBJ) -o $@ $(LDFLAGS)
+SRC = src/ft_printf.c \
+	src/ft_print_integer.c \
+	src/ft_print_pointer.c \
+	src/ft_print_string.c
 
+OBJ = $(SRC:.c=.o)
+
+all: $(NAME)
+
+$(NAME): $(LIBFT_LIB) $(OBJ)
+	cp $(LIBFT_LIB) $(NAME)
+	ar rcs $(NAME) $(OBJ)
+
+$(LIBFT_LIB):
+	$(MAKE) -C $(LIBFT)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -rf $(OBJ) $(EXE)
+	rm -f $(OBJ)
+	$(MAKE) -C $(LIBFT) clean
+
+fclean: clean
+	rm -f $(NAME)
+	$(MAKE) -C $(LIBFT) fclean
+
+re: fclean all
+
+.PHONY: all clean fclean re

@@ -1,13 +1,18 @@
 #include "ft_printf.h"
 
+#define HEX_TABLE "0123456789abcdef"
+#define CAP_HEX_TABLE "0123456789ABCDEF"
+
+
 void lu_to_hex(unsigned long num, int *num_of_characters, int is_upper){
     char temp_buffer[16];
-    int i = 0;
-    char hex_table[] = "0123456789abcdef";
+    int i;
+    char * hex_table;
+
+    hex_table = HEX_TABLE;
+    i = 0;
 	if (is_upper)
-		while (hex_table[i++])
-			hex_table[i] = ft_toupper(hex_table[i]);
-	i = 0;
+        hex_table = CAP_HEX_TABLE;
     while (num != 0)
 	{
         temp_buffer[i++] = hex_table[num % 16];
@@ -23,8 +28,13 @@ void lu_to_hex(unsigned long num, int *num_of_characters, int is_upper){
 void print_memory(va_list *arg_ptr, int *num_of_characters)
 {
     void* res;
-    res = va_arg(*arg_ptr, void*);	
+    res = va_arg(*arg_ptr, void*);
+    if (!res){
+        write(1,"(null)",6);
+        (*num_of_characters) += 6;
+        return ;
+    }
 	write(1, "0x", 2);	
 	(*num_of_characters) += 2;
-	lu_to_hex((unsigned long)res, num_of_characters, 0);
+	lu_to_hex((unsigned long long)res, num_of_characters, 0);
 }

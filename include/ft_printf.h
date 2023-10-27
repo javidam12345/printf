@@ -6,9 +6,6 @@
 #include "libft.h"
 
 
-
-int main();
-
 int ft_printf(const char *format, ...);
 
 void analyze_string(const char* format,va_list *arg_ptr, int *num_of_characters);

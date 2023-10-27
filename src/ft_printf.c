@@ -49,4 +49,12 @@ void percentage_switcher(const char* character, va_list *arg_ptr, int *num_of_ch
 		lu_to_hex((unsigned long)va_arg(*arg_ptr, unsigned int), num_of_characters, 0);
 	else if (*character == 'X')	
 	   	lu_to_hex((unsigned long)va_arg(*arg_ptr, unsigned int), num_of_characters, 1);
+    else if (*character == '%')
+    {
+        write(1, "%", 1);
+        (*num_of_characters)++;
+    } else {
+        write(1, character, 1);
+        (*num_of_characters)++;
+    }
 }
