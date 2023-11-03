@@ -12,12 +12,13 @@
 
 #include "ft_printf.h"
 
-void	read_number(va_list *arg_ptr, int *num_of_characters)
+int	read_number(va_list *arg_ptr, int *num_of_characters)
 {
 	int	converted;
 
 	converted = va_arg(*arg_ptr, int);
-	ft_putnbr_fd(converted, 1);
+	if (ft_putnbr_fd(converted, 1) == -1)
+		return (-1);
 	if (converted < 0)
 	{
 		converted = -converted;
@@ -33,18 +34,49 @@ void	read_number(va_list *arg_ptr, int *num_of_characters)
 			converted /= 10;
 		}
 	}
+	return (0);
 }
 
-void	read_number_u(unsigned int n, int *num_of_characters)
+static int	ft_putchar_increment(char c, int fd, int *num_of_characters)
 {
-	if (n >= 10)
+	if (ft_putchar_fd(c, fd) == -1)
+		return (-1);
+	(*num_of_characters)++;
+	return (0);
+}
+
+static int	print_digits(char *digits, int digit, int *num_of_characters)
+{
+	while (digit > 0)
 	{
-		read_number_u(n / 10, num_of_characters);
-		read_number_u(n % 10, num_of_characters);
+		if (ft_putchar_increment(digits[--digit], 1, num_of_characters) == -1)
+			return (-1);
+	}
+	return (0);
+}
+
+int	read_number_u(unsigned int n, int *num_of_characters)
+{
+	unsigned int	temp;
+	int				digit_count;
+	char			digits[10];
+
+	temp = n;
+	digit_count = 0;
+	if (temp == 0)
+	{
+		if (ft_putchar_increment('0', 1, num_of_characters) == -1)
+			return (-1);
 	}
 	else
 	{
-		ft_putchar_fd('0' + n, 1);
-		(*num_of_characters)++;
+		while (temp > 0)
+		{
+			digits[digit_count++] = (temp % 10) + '0';
+			temp /= 10;
+		}
+		if (print_digits(digits, digit_count, num_of_characters) == -1)
+			return (-1);
 	}
+	return (0);
 }

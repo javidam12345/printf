@@ -12,23 +12,29 @@
 
 #include "ft_printf.h"
 
-void	print_character(va_list *arg_ptr, int *num_of_characters)
+int	print_character(va_list *arg_ptr, int *num_of_characters)
 {
 	char	c;
 
 	c = va_arg(*arg_ptr, int);
-	write(1, &c, 1);
+	if (write(1, &c, 1) == -1)
+		return (-1);
 	(*num_of_characters)++;
+	return (0);
 }
 
-void	print_percentage(int *num_of_character)
+int	print_percentage(int *num_of_character)
 {
-	write(1, "%", 1);
+	if (write(1, "%", 1) == -1)
+		return (-1);
 	(*num_of_character)++;
+	return (0);
 }
 
-void	print_rest(const char *character, int *num_of_characters)
+int	print_rest(const char *character, int *num_of_characters)
 {
-	write(1, character, 1);
+	if (write(1, character, 1) == -1)
+		return (-1);
 	(*num_of_characters)++;
+	return (0);
 }

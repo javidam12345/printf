@@ -26,7 +26,7 @@ static void	number_to_hex_buffer(unsigned long long number, char *buffer,
 	}
 }
 
-void	print_hex_for_pointer(void *pointer, int *num_of_characters)
+int	print_hex_for_pointer(void *pointer, int *num_of_characters)
 {
 	unsigned long long	number;
 	char				buffer[17];
@@ -35,32 +35,37 @@ void	print_hex_for_pointer(void *pointer, int *num_of_characters)
 	number = (unsigned long long)pointer;
 	if (number == 0)
 	{
-		write(1, "0", 1);
+		if (write(1, "0", 1) == -1)
+			return (-1);
 		(*num_of_characters)++;
-		return ;
+		return (0);
 	}
 	number_to_hex_buffer(number, buffer, &index);
 	while (--index >= 0)
 	{
-		write(1, &buffer[index], 1);
+		if (write(1, &buffer[index], 1) == -1)
+			return (-1);
 		(*num_of_characters)++;
 	}
+	return (0);
 }
 
-void	print_memory(va_list *arg_ptr, int *num_of_characters)
+int	print_memory(va_list *arg_ptr, int *num_of_characters)
 {
 	void	*res;
 
 	res = va_arg(*arg_ptr, void *);
 	if (!res)
 	{
-		write(1, "0x0", 3);
+		if (write(1, "0x0", 3) == -1)
+			return (-1);
 		(*num_of_characters) += 3;
-		return ;
+		return (0);
 	}
-	write(1, "0x", 2);
+	if (write(1, "0x", 2) == -1)
+		return (-1);
 	(*num_of_characters) += 2;
-	print_hex_for_pointer(res, num_of_characters);
+	return (print_hex_for_pointer(res, num_of_characters));
 }
 
 static char	*get_hex_digits(int uppercase)
@@ -71,8 +76,7 @@ static char	*get_hex_digits(int uppercase)
 		return ("0123456789abcdef");
 }
 
-void	print_hex(unsigned long long number, int uppercase,
-		int *num_of_characters)
+int	print_hex(unsigned long long number, int uppercase, int *num_of_characters)
 {
 	char	*hex_digits;
 	char	buffer[17];
@@ -82,9 +86,10 @@ void	print_hex(unsigned long long number, int uppercase,
 	index = 0;
 	if (!number)
 	{
-		write(1, "0", 1);
+		if (write(1, "0", 1) == -1)
+			return (-1);
 		(*num_of_characters)++;
-		return ;
+		return (0);
 	}
 	while (number)
 	{
@@ -93,7 +98,9 @@ void	print_hex(unsigned long long number, int uppercase,
 	}
 	while (--index >= 0)
 	{
-		write(1, &buffer[index], 1);
+		if (write(1, &buffer[index], 1) == -1)
+			return (-1);
 		(*num_of_characters)++;
 	}
+	return (0);
 }

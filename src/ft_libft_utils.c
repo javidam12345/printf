@@ -1,41 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_libft_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaragone <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/03 17:10:52 by jaragone          #+#    #+#             */
+/*   Updated: 2023/11/03 17:10:54 by jaragone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-void	ft_putstr_fd(char *s, int fd)
+int	ft_putstr_fd(char *s, int fd)
 {
 	int	i;
 
 	i = 0;
 	if (!s)
-		return ;
+		return (0);
 	while (s[i])
 	{
-		ft_putchar_fd(s[i], fd);
+		if (ft_putchar_fd(s[i], fd) == -1)
+			return (-1);
 		i++;
 	}
+	return (0);
 }
 
-void	ft_putnbr_fd(int n, int fd)
+int	ft_putnbr_fd(int n, int fd)
 {
 	long long int	t;
+	long long int	power;
+	char			num;
 
 	t = n;
 	if (t < 0)
 	{
-		t *= -1;
-		ft_putchar_fd('-', fd);
+		if (ft_putchar_fd('-', fd) == -1)
+			return (-1);
+		t = -t;
 	}
-	if (t > 9)
+	power = 1;
+	while (power <= t / 10)
+		power *= 10;
+	while (power > 0)
 	{
-		ft_putnbr_fd((t / 10), fd);
-		ft_putchar_fd((t % 10 + '0'), fd);
+		num = (t / power) % 10 + '0';
+		if (ft_putchar_fd(num, fd) == -1)
+			return (-1);
+		t %= power;
+		power /= 10;
 	}
-	else
-		ft_putchar_fd((t + '0'), fd);
+	return (0);
 }
 
-void	ft_putchar_fd(char c, int fd)
+int	ft_putchar_fd(char c, int fd)
 {
-	write(fd, &c, 1);
+	return (write(fd, &c, 1));
 }
 
 size_t	ft_strlen(const char *str)

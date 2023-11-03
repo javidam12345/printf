@@ -31,38 +31,47 @@ void	analyze_string(const char *format, va_list *arg_ptr,
 	{
 		if (*format == '%')
 		{
-			percentage_switcher(++format, arg_ptr, num_of_characters);
+			if (percentage_switcher(++format, arg_ptr, num_of_characters) == -1)
+			{
+				*num_of_characters = -1;
+				return ;
+			}
 		}
 		else
 		{
-			write(1, format, 1);
+			if (write(1, format, 1) == -1)
+			{
+				*num_of_characters = -1;
+				return ;
+			}
 			(*num_of_characters)++;
 		}
 		format++;
 	}
 }
 
-void	percentage_switcher(const char *character, va_list *arg_ptr,
+int	percentage_switcher(const char *character, va_list *arg_ptr,
 		int *num_of_characters)
 {
 	if ((*character == 'd') || (*character == 'i'))
-		read_number(arg_ptr, num_of_characters);
+		return (read_number(arg_ptr, num_of_characters));
 	else if (*character == 's')
-		print_string(arg_ptr, num_of_characters);
+		return (print_string(arg_ptr, num_of_characters));
 	else if (*character == 'p')
-		print_memory(arg_ptr, num_of_characters);
+		return (print_memory(arg_ptr, num_of_characters));
 	else if (*character == 'c')
-		print_character(arg_ptr, num_of_characters);
+		return (print_character(arg_ptr, num_of_characters));
 	else if (*character == 'u')
-		read_number_u(va_arg(*arg_ptr, unsigned int), num_of_characters);
+		return (read_number_u(va_arg(*arg_ptr, unsigned int),
+				num_of_characters));
 	else if (*character == 'x')
-		print_hex((unsigned long long)va_arg(*arg_ptr, unsigned int), 0,
-			num_of_characters);
+		return (print_hex((unsigned long long)va_arg(*arg_ptr, unsigned int), 0,
+				num_of_characters));
 	else if (*character == 'X')
-		print_hex((unsigned long long)va_arg(*arg_ptr, unsigned int), 1,
-			num_of_characters);
+		return (print_hex((unsigned long long)va_arg(*arg_ptr, unsigned int), 1,
+				num_of_characters));
 	else if (*character == '%')
-		print_percentage(num_of_characters);
+		return (print_percentage(num_of_characters));
 	else
-		print_rest(character, num_of_characters);
+		return (print_rest(character, num_of_characters));
 }
